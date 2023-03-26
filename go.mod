@@ -1,4 +1,4 @@
-module Golang
+module github.com/divyasriambati/LoginServiceGolang
 
 go 1.20
 
