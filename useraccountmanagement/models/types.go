@@ -1,6 +1,6 @@
 package types
 
-type SignupForm struct {
+type User struct {
 	FirstName       string `json:"firstname"`
 	LastName        string `json:"lastname"`
 	UserName        string `json:"username"`
