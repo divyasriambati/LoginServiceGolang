@@ -5,15 +5,17 @@ import (
 	"net/http"
 
 	_ "github.com/go-sql-driver/mysql"
+
+	useraccountmanagement "github.com/divyasriambati/LoginServiceGolang/useraccountmanagement/endpoints"
 )
 
 func main() {
 
-	http.HandleFunc("/signup", handleSignup)
-	http.HandleFunc("/login", handleLogin)
-	http.HandleFunc("/deleteUser", deleteUserHandler(db))
-	http.HandleFunc("/update", updateUserPasswordHandler(db))
-	http.HandleFunc("/getusers", handleGetUsers)
+	http.HandleFunc("/signup", useraccountmanagement.HandleSignup)
+	http.HandleFunc("/login", useraccountmanagement.HandleLogin)
+	http.HandleFunc("/deleteUser", useraccountmanagement.DeleteUserHandler)
+	http.HandleFunc("/update", useraccountmanagement.UpdateUserPasswordHandler)
+	http.HandleFunc("/getusers", useraccountmanagement.HandleGetUsers)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
 

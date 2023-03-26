@@ -9,12 +9,11 @@ import (
 const dbname = "mysql"
 const dburl = "root:Divya@123@tcp(localhost:3306)/golangtestdb"
 
-func Connectdb() {
+func Connectdb() (*sql.DB, error) {
 	db, err := sql.Open(dbname, dburl)
 	if err != nil {
 		panic(err.Error())
 	}
-	defer db.Close()
 
 	return db, nil
 }
