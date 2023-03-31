@@ -24,7 +24,7 @@ func ValidateUser(user types.User) (int, error) {
 	if user.UserName == "" {
 		return http.StatusBadRequest, errors.New("Username missing")
 	}
-	if IsEmailValid(user.Email) {
+	if !IsEmailValid(user.Email) {
 		return http.StatusBadRequest, errors.New("Invalid Email")
 	}
 	if len(user.Password) < 8 {

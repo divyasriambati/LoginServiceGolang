@@ -20,7 +20,7 @@ func InsertUser(user types.User) error {
 	}
 	defer stmt.Close()
 
-	_, err = stmt.Exec(user.FirstName+user.LastName, user.UserName, user.Email, user.Password)
+	_, err = stmt.Exec(user.FirstName+" "+user.LastName, user.UserName, user.Email, user.Password)
 	if err != nil {
 		return err
 	}
@@ -45,8 +45,7 @@ func GetUserLoginDetails(user types.Login) error {
 	var dbUser types.Login
 	err = stmt.QueryRow(user.Username, user.Password).Scan(&dbUser.Username, &dbUser.Password)
 	if err != nil {
-		// return errors.New("Invalid Email or password")
-		return err
+		return errors.New("Invalid Email or password")
 	}
 
 	return nil
