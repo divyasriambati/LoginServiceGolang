@@ -4,9 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
-
-	"github.com/golang-jwt/jwt/v4"
 
 	userdb "github.com/divyasriambati/LoginServiceGolang/useraccountmanagement/db"
 	types "github.com/divyasriambati/LoginServiceGolang/useraccountmanagement/models"
@@ -35,17 +32,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Create a new JWT token
-	token := jwt.New(jwt.SigningMethodHS256)
-
-	// Set the claims for the token
-	claims := token.Claims.(jwt.MapClaims)
-	claims["username"] = user.Username
-	claims["exp"] = time.Now().Add(time.Minute * 10).Unix() // Set token expiration to 1 hours
-
-	// Sign the token with a secret key
-	secretKey := []byte("useraccountmanagementauth") // Replace with your own secret key
-	tokenString, err := token.SignedString(secretKey)
+	tokenString, err := auth.GenerateJWT(user.Username)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
@@ -56,7 +43,6 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{
 		"token": tokenString,
 	})
-
 	w.Write([]byte("Login successfully"))
 
 }

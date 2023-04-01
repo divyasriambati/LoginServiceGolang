@@ -19,7 +19,7 @@ func GenerateJWT(username string) (string, error) {
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // Set token expiration to 24 hours
 
 	// Sign the token with a secret key
-	secretKey := []byte("my-secret-key") // Replace with your own secret key
+	secretKey := []byte("useraccountmanagementauth") // Replace with your own secret key
 	tokenString, err := token.SignedString(secretKey)
 	if err != nil {
 		return "", err
