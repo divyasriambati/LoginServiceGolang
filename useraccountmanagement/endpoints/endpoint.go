@@ -10,6 +10,7 @@ import (
 
 	userdb "github.com/divyasriambati/LoginServiceGolang/useraccountmanagement/db"
 	types "github.com/divyasriambati/LoginServiceGolang/useraccountmanagement/models"
+	auth "github.com/divyasriambati/LoginServiceGolang/useraccountmanagement/validations"
 	validators "github.com/divyasriambati/LoginServiceGolang/useraccountmanagement/validations"
 )
 
@@ -40,7 +41,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	// Set the claims for the token
 	claims := token.Claims.(jwt.MapClaims)
 	claims["username"] = user.Username
-	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // Set token expiration to 24 hours
+	claims["exp"] = time.Now().Add(time.Minute * 10).Unix() // Set token expiration to 1 hours
 
 	// Sign the token with a secret key
 	secretKey := []byte("useraccountmanagementauth") // Replace with your own secret key
@@ -101,6 +102,13 @@ func DeleteUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	tokenUser := auth.GetTokendata(r)
+
+	if tokenUser != user.UserName {
+		fmt.Fprint(w, "Login needed")
+		return
+	}
+
 	//delete user from DB
 	err = userdb.DeleteUser(user)
 	if err != nil {
@@ -121,6 +129,13 @@ func UpdateUserPasswordHandler(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	tokenUser := auth.GetTokendata(r)
+
+	if tokenUser != user.Username {
+		fmt.Fprint(w, "Login needed")
 		return
 	}
 
